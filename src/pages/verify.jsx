@@ -11,7 +11,7 @@ const Verify = () => {
 
     useEffect(() => {
         (currentUser?.emailVerified || !currentUser) && router.push("/");
-    }, []);
+    }, [currentUser, router]);
 
     return (
         <Box>
@@ -19,7 +19,7 @@ const Verify = () => {
             <Center w="100%" h="92.5vh">
                 <Flex
                     p="10"
-                    maxWidth="370px"
+                    maxWidth="370px"npm
                     borderWidth="1px"
                     borderRadius="md"
                     flexDir="column"
@@ -35,8 +35,7 @@ const Verify = () => {
                         Verify your email address
                     </Heading>
                     <Text textAlign="center" fontSize="md">
-                        To verify your account tap on the link in the email
-                        we've sent.
+                        To verify your account tap on the link in the email we&quot;ve sent.
                     </Text>
                     <Button
                         width="175px"

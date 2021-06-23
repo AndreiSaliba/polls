@@ -10,7 +10,7 @@ const Dashboard = () => {
     const router = useRouter();
     useEffect(() => {
         !currentUser && router.push("/");
-    }, [currentUser]);
+    }, [currentUser, router]);
 
     return (
         <Box>
