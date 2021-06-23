@@ -18,8 +18,54 @@ export const AuthProvider = ({ children }) => {
                 const user = res.user;
                 if (user) {
                     setCurrentUser(user);
-                    console.log(user);
-                    router.push("/");
+                    // console.log(user);
+                }
+                if (!user.emailVerified) {
+                    firebase.auth().currentUser.sendEmailVerification({
+                        url:
+                            process.env.NODE_ENV === "production"
+                                ? "https://polls-as.vercel.app"
+                                : "http://localhost:3000/",
+                    });
+                    router.push("/verify");
+                }
+            })
+
+            .catch((error) => {
+                if (
+                    error.code ==
+                    "auth/account-exists-with-different-credential"
+                ) {
+                    toast({
+                        title: "Your account is linked to a different Auth Provider",
+                        description:
+                            "Please sign in with the provider that is linked to your account.",
+                        status: "error",
+                        isClosable: true,
+                        duration: 10000,
+                    });
+                }
+            });
+    };
+
+    const signinWithTwitter = () => {
+        return firebase
+            .auth()
+            .signInWithPopup(new firebase.auth.TwitterAuthProvider())
+            .then((res) => {
+                const user = res.user;
+                if (user) {
+                    setCurrentUser(user);
+                    // console.log(user);
+                }
+                if (!user.emailVerified) {
+                    firebase.auth().currentUser.sendEmailVerification({
+                        url:
+                            process.env.NODE_ENV === "production"
+                                ? "https://polls-as.vercel.app"
+                                : "http://localhost:3000/",
+                    });
+                    router.push("/verify");
                 }
             })
             .catch((error) => {
@@ -28,9 +74,9 @@ export const AuthProvider = ({ children }) => {
                     "auth/account-exists-with-different-credential"
                 ) {
                     toast({
-                        title: "Account already exists with other provider.",
+                        title: "Your account is linked to a different Auth Provider",
                         description:
-                            "Please Login with other provider and link new provider in your dashboard.",
+                            "Please sign in with the provider that is linked to your account.",
                         status: "error",
                         isClosable: true,
                         duration: 10000,
@@ -47,13 +93,16 @@ export const AuthProvider = ({ children }) => {
                 const user = res.user;
                 if (user) {
                     setCurrentUser(user);
-                    console.log(user);
-                    router.push("/");
+                    // console.log(user);
                 }
-            })
-            .then(() => {
-                if (!firebase.auth().currentUser.emailVerified) {
-                    firebase.auth().currentUser.sendEmailVerification();
+                if (!user.emailVerified) {
+                    firebase.auth().currentUser.sendEmailVerification({
+                        url:
+                            process.env.NODE_ENV === "production"
+                                ? "https://polls-as.vercel.app"
+                                : "http://localhost:3000/",
+                    });
+                    router.push("/verify");
                 }
             })
             .catch((error) => {
@@ -62,9 +111,9 @@ export const AuthProvider = ({ children }) => {
                     "auth/account-exists-with-different-credential"
                 ) {
                     toast({
-                        title: "Account already exists with other provider.",
+                        title: "Your account is linked to a different Auth Provider",
                         description:
-                            "Please Login with other provider and link new provider in your dashboard.",
+                            "Please sign in with the provider that is linked to your account.",
                         status: "error",
                         isClosable: true,
                         duration: 10000,
@@ -80,6 +129,19 @@ export const AuthProvider = ({ children }) => {
             .then(() => setCurrentUser(null));
     };
 
+    // const sendVerificationEmail = new Promise((resolve, reject) => {
+    //     if (!firebase.auth()?.currentUser?.emailVerified) {
+    //         resolve(() =>
+    //             firebase.auth()?.currentUser?.sendEmailVerification()
+    //         );
+    //     } else if (firebase.auth()?.currentUser?.emailVerified) {
+    //         reject({
+    //             emailVerified: firebase.auth()?.currentUser?.emailVerified,
+    //             error: "Email is verified",
+    //         });
+    //     }
+    // });
+
     useEffect(() => {
         const unsubscribe = firebase
             .auth()
@@ -89,7 +151,13 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ currentUser, signinWithGoogle, signinWithGithub, signOut }}
+            value={{
+                currentUser,
+                signinWithGoogle,
+                signinWithGithub,
+                signinWithTwitter,
+                signOut,
+            }}
         >
             {children}
         </AuthContext.Provider>

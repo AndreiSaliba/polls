@@ -24,9 +24,11 @@ const Header = ({ themeButtonOnly }) => {
             mt="7"
         >
             {!themeButtonOnly && (
-                <Heading fontSize="3xl" fontWeight="bold">
-                    Polls
-                </Heading>
+                <NextLink href="/">
+                    <Heading fontSize="3xl" fontWeight="bold">
+                        Polls
+                    </Heading>
+                </NextLink>
             )}
 
             {themeButtonOnly ? (
@@ -40,18 +42,14 @@ const Header = ({ themeButtonOnly }) => {
             ) : (
                 <Flex align="center">
                     {currentUser ? (
-                        <Flex align="center">
-                            <Heading mr="2" size="sm" fontWeight="semibold">
-                                {currentUser?.displayName}
-                            </Heading>
+                        <NextLink href="/dashboard">
                             <Avatar
                                 mr="3"
                                 w="40px"
                                 h="40px"
                                 src={currentUser?.photoURL}
-                                onClick={signOut}
                             />
-                        </Flex>
+                        </NextLink>
                     ) : (
                         <NextLink href="/signin">
                             <Button aria-label="Sign In" mr="2">

@@ -1,13 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import {
     Center,
     Box,
     Flex,
     Button,
     Heading,
-    Text,
     LightMode,
-    useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FaGoogle, FaGithub, FaTwitter } from "react-icons/fa";
@@ -15,11 +13,13 @@ import { AuthContext } from "../utils/Auth";
 import Header from "../components/Header";
 
 const Signin = () => {
-    const [error, setError] = useState("");
-    const { currentUser, signinWithGoogle, signinWithGithub } =
-        useContext(AuthContext);
+    const {
+        currentUser,
+        signinWithGoogle,
+        signinWithGithub,
+        signinWithTwitter,
+    } = useContext(AuthContext);
     const router = useRouter();
-    const toast = useToast();
     currentUser && router.push("/");
 
     return (
@@ -45,20 +45,7 @@ const Signin = () => {
                             size="lg"
                             color="black"
                             _hover={{ backgroundColor: "gray.200" }}
-                            onClick={() => {
-                                try {
-                                    signinWithGoogle();
-                                } catch (error) {
-                                    
-                                }
-
-                                // .catch((error) => {
-
-                                //     // setError(
-                                //     //     "Account already exists with other provider. Please Login with other provider and link new provider in your dashboard."
-                                //     // );
-                                // });
-                            }}
+                            onClick={signinWithGoogle}
                         >
                             Google
                         </Button>
@@ -70,6 +57,7 @@ const Signin = () => {
                             size="lg"
                             colorScheme="twitter"
                             _hover={{ backgroundColor: "twitter.700" }}
+                            onClick={signinWithTwitter}
                         >
                             Twitter
                         </Button>
@@ -88,11 +76,6 @@ const Signin = () => {
                             Github
                         </Button>
                     </LightMode>
-                    {error && (
-                        <Text mt="3" colorScheme="red">
-                            {error}
-                        </Text>
-                    )}
                 </Flex>
             </Center>
         </Box>
