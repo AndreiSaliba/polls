@@ -1,4 +1,6 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
+import { AuthContext } from "../utils/Auth";
 import {
     Center,
     Box,
@@ -7,9 +9,7 @@ import {
     Heading,
     LightMode,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { FaGoogle, FaGithub, FaTwitter } from "react-icons/fa";
-import { AuthContext } from "../utils/Auth";
 import Header from "../components/Header";
 
 const Signin = () => {
@@ -20,7 +20,10 @@ const Signin = () => {
         signinWithTwitter,
     } = useContext(AuthContext);
     const router = useRouter();
-    currentUser && router.push("/");
+
+    useEffect(() => {
+        currentUser && router.push("/");
+    }, [router]);
 
     return (
         <Box>

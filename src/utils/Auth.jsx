@@ -28,6 +28,8 @@ export const AuthProvider = ({ children }) => {
                                 : "http://localhost:3000/",
                     });
                     router.push("/verify");
+                } else if (user.emailVerified) {
+                    router.push("/");
                 }
             })
 
@@ -66,6 +68,8 @@ export const AuthProvider = ({ children }) => {
                                 : "http://localhost:3000/",
                     });
                     router.push("/verify");
+                } else if (user.emailVerified) {
+                    router.push("/");
                 }
             })
             .catch((error) => {
@@ -103,6 +107,8 @@ export const AuthProvider = ({ children }) => {
                                 : "http://localhost:3000/",
                     });
                     router.push("/verify");
+                } else if (user.emailVerified) {
+                    router.push("/");
                 }
             })
             .catch((error) => {
@@ -128,19 +134,6 @@ export const AuthProvider = ({ children }) => {
             .signOut()
             .then(() => setCurrentUser(null));
     };
-
-    // const sendVerificationEmail = new Promise((resolve, reject) => {
-    //     if (!firebase.auth()?.currentUser?.emailVerified) {
-    //         resolve(() =>
-    //             firebase.auth()?.currentUser?.sendEmailVerification()
-    //         );
-    //     } else if (firebase.auth()?.currentUser?.emailVerified) {
-    //         reject({
-    //             emailVerified: firebase.auth()?.currentUser?.emailVerified,
-    //             error: "Email is verified",
-    //         });
-    //     }
-    // });
 
     useEffect(() => {
         const unsubscribe = firebase

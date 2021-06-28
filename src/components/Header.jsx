@@ -13,7 +13,7 @@ import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 const Header = ({ themeButtonOnly }) => {
     const { colorMode, toggleColorMode } = useColorMode();
-    const { currentUser, signOut } = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
 
     return (
         <Flex
@@ -25,9 +25,11 @@ const Header = ({ themeButtonOnly }) => {
         >
             {!themeButtonOnly && (
                 <NextLink href="/">
-                    <Heading fontSize="3xl" fontWeight="bold">
-                        Polls
-                    </Heading>
+                    <a>
+                        <Heading fontSize="3xl" fontWeight="bold">
+                            Polls
+                        </Heading>
+                    </a>
                 </NextLink>
             )}
 
@@ -52,9 +54,11 @@ const Header = ({ themeButtonOnly }) => {
                         </NextLink>
                     ) : (
                         <NextLink href="/signin">
-                            <Button aria-label="Sign In" mr="2">
-                                Sign In
-                            </Button>
+                            <a>
+                                <Button aria-label="Sign In" mr="2">
+                                    Sign In
+                                </Button>
+                            </a>
                         </NextLink>
                     )}
 
