@@ -2,6 +2,7 @@ import { useState, useEffect, createContext } from "react";
 import { useRouter } from "next/router";
 import { useToast } from "@chakra-ui/toast";
 import firebase from "./firebase";
+import { createUser } from "./db";
 
 export const AuthContext = createContext();
 
@@ -18,21 +19,15 @@ export const AuthProvider = ({ children }) => {
                 const user = res.user;
                 if (user) {
                     setCurrentUser(user);
-                    // console.log(user);
-                }
-                if (!user.emailVerified) {
-                    firebase.auth().currentUser.sendEmailVerification({
-                        url:
-                            process.env.NODE_ENV === "production"
-                                ? "https://polls-as.vercel.app"
-                                : "http://localhost:3000/",
+                    createUser(user.uid, {
+                        email: user.email,
+                        pollsCreated: [],
+                        pollsVoted: [],
                     });
-                    router.push("/verify");
-                } else if (user.emailVerified) {
+                } else {
                     router.push("/");
                 }
             })
-
             .catch((error) => {
                 if (
                     error.code ==
@@ -58,15 +53,14 @@ export const AuthProvider = ({ children }) => {
                 const user = res.user;
                 if (user) {
                     setCurrentUser(user);
-                    // console.log(user);
+                    createUser(user.uid, {
+                        email: user.email,
+                        pollsCreated: [],
+                        pollsVoted: [],
+                    });
                 }
                 if (!user.emailVerified) {
-                    firebase.auth().currentUser.sendEmailVerification({
-                        url:
-                            process.env.NODE_ENV === "production"
-                                ? "https://polls-as.vercel.app"
-                                : "http://localhost:3000/",
-                    });
+                    firebase.auth().currentUser.sendEmailVerification();
                     router.push("/verify");
                 } else if (user.emailVerified) {
                     router.push("/");
@@ -97,15 +91,14 @@ export const AuthProvider = ({ children }) => {
                 const user = res.user;
                 if (user) {
                     setCurrentUser(user);
-                    // console.log(user);
+                    createUser(user.uid, {
+                        email: user.email,
+                        pollsCreated: [],
+                        pollsVoted: [],
+                    });
                 }
                 if (!user.emailVerified) {
-                    firebase.auth().currentUser.sendEmailVerification({
-                        url:
-                            process.env.NODE_ENV === "production"
-                                ? "https://polls-as.vercel.app"
-                                : "http://localhost:3000/",
-                    });
+                    firebase.auth().currentUser.sendEmailVerification();
                     router.push("/verify");
                 } else if (user.emailVerified) {
                     router.push("/");

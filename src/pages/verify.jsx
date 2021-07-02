@@ -42,31 +42,8 @@ const Verify = () => {
                     <Text color="#ff0033" mt="3">
                         {error}
                     </Text>
-                    <Flex justify="space-between" w="90%" mt="4">
-                        <Button
-                            width="125px"
-                            mb="-5"
-                            onClick={() => {
-                                firebase.auth().currentUser.reload();
-                                if (!currentUser.emailVerified) {
-                                    firebase
-                                        .auth()
-                                        .currentUser.sendEmailVerification({
-                                            url:
-                                                process.env.NODE_ENV ===
-                                                "production"
-                                                    ? "https://polls-as.vercel.app"
-                                                    : "http://localhost:3000/",
-                                        });
-                                } else if (currentUser.emailVerified) {
-                                    router.push("/");
-                                }
-                            }}
-                        >
-                            Resend Email
-                        </Button>
-                        <Button
-                            width="125px"
+                        <Button mt="4"
+                            width="175px"
                             mb="-5"
                             colorScheme="blue"
                             onClick={() => {
@@ -86,7 +63,6 @@ const Verify = () => {
                         >
                             Continue
                         </Button>
-                    </Flex>
                 </Flex>
             </Center>
         </Box>

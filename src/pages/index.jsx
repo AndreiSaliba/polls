@@ -6,8 +6,8 @@ const Home = () => {
     return (
         <>
             <Header />
-            <Center pt="10">
-                {/* <CreatePoll /> */}
+            <Center mt="50px">
+                <CreatePoll />
             </Center>
         </>
     );

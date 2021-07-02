@@ -12,21 +12,21 @@ const AuthConnection = ({ providerId, bottom }) => {
     const { colorMode } = useColorMode();
     const [type, setType] = useState();
 
-    let provider;
     let name;
+    let provider;
 
     switch (providerId) {
         case "google.com":
-            provider = new firebase.auth.GoogleAuthProvider();
             name = "Google";
+            provider = new firebase.auth.GoogleAuthProvider();
             break;
         case "twitter.com":
-            provider = new firebase.auth.TwitterAuthProvider();
             name = "Twitter";
+            provider = new firebase.auth.TwitterAuthProvider();
             break;
         case "github.com":
-            provider = new firebase.auth.GithubAuthProvider();
             name = "Github";
+            provider = new firebase.auth.GithubAuthProvider();
             break;
     }
 
@@ -77,14 +77,14 @@ const AuthConnection = ({ providerId, bottom }) => {
             background-color: ${
                 colorMode === "dark"
                     ? theme.colors.whiteAlpha[300]
-                    : theme.colors.blackAlpha[300]
+                    : theme.colors.gray[300]
             }
         }
         &:active { 
             background-color: ${
                 colorMode === "dark"
                     ? theme.colors.whiteAlpha[400]
-                    : theme.colors.blackAlpha[400]
+                    : theme.colors.gray[400]
             }
         }
     `;
@@ -115,7 +115,7 @@ const AuthConnection = ({ providerId, bottom }) => {
             </Flex>
             <Button
                 w="125px"
-                variant={type === "connect" ? "" : "outline"}
+                variant={type === "connect" ? "solid" : "outline"}
                 css={[
                     (theme) => `
                     ${
@@ -124,17 +124,17 @@ const AuthConnection = ({ providerId, bottom }) => {
                             background-color: ${
                                 colorMode === "dark"
                                     ? theme.colors.whiteAlpha[200]
-                                    : theme.colors.blackAlpha[200]
+                                    : theme.colors.gray[200]
                             };`
                             : `
                             border-width: 2px;
                             border-color: ${
                                 colorMode === "dark"
                                     ? theme.colors.whiteAlpha[200]
-                                    : theme.colors.blackAlpha[200]
+                                    : theme.colors.gray[200]
                             };`
                     }
-                    
+
                 `,
                     buttonCSS,
                 ]}

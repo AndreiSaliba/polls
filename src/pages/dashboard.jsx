@@ -50,11 +50,12 @@ const Dashboard = () => {
                         flexDirection="column"
                         width="600px"
                         maxWidth="90vw"
-                        marginTop="5"
+                        marginTop="7"
                         padding="5"
                         borderRadius="lg"
+                        borderWidth="1px"
                         backgroundColor={
-                            colorMode === "dark" ? "whiteAlpha.200" : "gray.100"
+                            colorMode === "dark" ? "whiteAlpha.200" : "gray.50"
                         }
                     >
                         <AuthConnection providerId="google.com" />
