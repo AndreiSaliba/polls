@@ -2,8 +2,8 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
 import { useContext, useEffect, useState } from "react";
-import { createPoll } from "../utils/db";
 import { AuthContext } from "../utils/Auth";
+import { createPoll, generateID } from "../utils/db";
 import {
     Flex,
     Box,
@@ -12,13 +12,13 @@ import {
     useColorMode,
     Checkbox,
 } from "@chakra-ui/react";
+import router from "next/router";
 
 const CreatePoll = () => {
     const { colorMode } = useColorMode();
     const { currentUser } = useContext(AuthContext);
     const [title, setTitle] = useState("");
     const [fields, setFields] = useState(["", ""]);
-    const [multipleAnswers, setMultipleAnswers] = useState(false);
     const [ipChecking, setIpChecking] = useState(false);
 
     const submitPoll = () => {
@@ -27,19 +27,19 @@ const CreatePoll = () => {
             .map((element) => {
                 return { option: element, count: 0 };
             });
-        createPoll(currentUser?.uid, {
-            title: title,
-            options: optionArray,
-            authorID: currentUser?.uid ?? null,
-            dateCreated: new Date(),
-            multipleAnswers,
-            ipChecking,
-            ipList: [],
-        });
-        setTitle("");
-        setFields(["", ""]);
-        setIpChecking(false);
-        setMultipleAnswers(false);
+        if (optionArray.length > 1) {
+            const id = generateID();
+            createPoll(currentUser?.uid, id, {
+                title: title,
+                options: optionArray,
+                authorID: currentUser?.uid ?? null,
+                dateCreated: new Date(),
+                ipChecking,
+            }).then(router.push(`/poll/${id}`));
+            setTitle("");
+            setFields(["", ""]);
+            setIpChecking(false);
+        }
     };
 
     const onChange = (e) => {
@@ -110,22 +110,26 @@ const CreatePoll = () => {
                     })}
                 </Box>
             </Box>
-            <Flex align="flex-end" justify="space-between" mt="5">
-                <Flex flexDirection="column" justifyContent="space-between">
-                    <Checkbox
+            <Flex align="center" justify="space-between" mt="5">
+                {/* <Flex
+                    // flexDirection="column"
+                    // justifyContent="space-between"
+                    minH="100%"
+                > */}
+                {/* <Checkbox
                         mb="0.5"
                         isChecked={multipleAnswers}
                         onChange={(e) => setMultipleAnswers(e.target.checked)}
                     >
                         Allow multiple poll answers
-                    </Checkbox>
-                    <Checkbox
-                        isChecked={ipChecking}
-                        onChange={(e) => setIpChecking(e.target.checked)}
-                    >
-                        IP Duplication Checking
-                    </Checkbox>
-                </Flex>
+                    </Checkbox> */}
+                <Checkbox
+                    isChecked={ipChecking}
+                    onChange={(e) => setIpChecking(e.target.checked)}
+                >
+                    IP Duplication Checking
+                </Checkbox>
+                {/* </Flex> */}
                 <Button
                     onClick={submitPoll}
                     css={(theme) => `

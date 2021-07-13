@@ -24,7 +24,6 @@ export const AuthProvider = ({ children }) => {
                         pollsCreated: [],
                         pollsVoted: [],
                     });
-                } else {
                     router.push("/");
                 }
             })

@@ -17,20 +17,112 @@ export const createUser = (uid, data) => {
         });
 };
 
-export const createPoll = (uid, data) => {
-    const doc = firestore.collection("polls").doc();
-    firestore
+export const createPoll = (uid, docID, data) => {
+    return firestore
         .collection("polls")
-        .doc(doc.id)
-        .set({ pollID: doc.id, ...data }, { merge: true });
-    if (uid) {
-        firestore
-            .collection("users")
-            .doc(uid)
-            .update({
-                pollsCreated: firebase.firestore.FieldValue.arrayUnion(doc.id),
+        .doc(docID)
+        .set({ pollID: docID, ...data }, { merge: true })
+        .then(() => {
+            if (data.ipChecking) {
+                firestore.collection("votes").doc(docID).set({
+                    pollID: docID,
+                    ipList: [],
+                });
+            }
+            if (uid) {
+                firestore
+                    .collection("users")
+                    .doc(uid)
+                    .update({
+                        pollsCreated:
+                            firebase.firestore.FieldValue.arrayUnion(docID),
+                    });
+            }
+        });
+};
+
+export const addVote = async (id, uid, option, ipChecking) => {
+    const localVotes = JSON.parse(localStorage.getItem("userVotes")) || [];
+    const userVoted = await firestore
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((doc) => doc.data())
+        .then((data) => data?.pollsVoted.includes(id));
+    const data = await getPoll(id).then((doc) => doc.data());
+    const ip = data.ipChecking
+        ? await fetch("https://api.ipify.org")
+              .then((data) => data.text())
+              .catch(null)
+        : null;
+    const addCount = async () => {
+        const index = data.options.findIndex((item) => item.option === option);
+        data.options[index].count++;
+        return firestore
+            .collection("polls")
+            .doc(id)
+            .set({ ...data }, { merge: true })
+            .then(() => {
+                if (uid) {
+                    firestore
+                        .collection("users")
+                        .doc(uid)
+                        .update({
+                            pollsVoted:
+                                firebase.firestore.FieldValue.arrayUnion(id),
+                        });
+                }
+                if (ipChecking) {
+                    firestore
+                        .collection("votes")
+                        .doc(id)
+                        .update({
+                            ipList: firebase.firestore.FieldValue.arrayUnion(
+                                ip
+                            ),
+                        });
+                }
+                if (!localVotes.includes(id)) {
+                    localVotes.push(id);
+                }
+                localStorage.setItem("userVotes", JSON.stringify(localVotes));
             });
+    };
+    const hasIPVoted = () => {
+        return firestore
+            .collection("votes")
+            .where("pollID", "==", id)
+            .where("ipList", "array-contains", ip)
+            .get()
+            .then((querySnapshot) => querySnapshot.empty);
+    };
+
+    if (!userVoted && uid) {
+        console.log("User");
+        addCount();
+    } else if (!localVotes.includes(id) && !ip && !userVoted) {
+        console.log("Local");
+        addCount();
+    } else if (
+        (await hasIPVoted()) &&
+        !localVotes.includes(id) &&
+        ip &&
+        !userVoted
+    ) {
+        console.log("Ip");
+        addCount();
+    } else {
+        console.error("You have already voted in this poll.");
     }
+};
+
+export const getPoll = (id) => {
+    return firestore.collection("polls").doc(id).get();
+};
+
+export const generateID = () => {
+    const { id } = firestore.collection("polls").doc();
+    return id;
 };
 
 export default firestore;
