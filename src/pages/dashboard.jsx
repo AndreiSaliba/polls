@@ -17,7 +17,7 @@ const Dashboard = () => {
         }, 500);
 
         return () => clearTimeout(timeout);
-    }, [currentUser]);
+    }, [currentUser, router]);
 
     return (
         <Box>

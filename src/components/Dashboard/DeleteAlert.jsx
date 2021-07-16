@@ -40,8 +40,8 @@ const DeleteAlert = ({ deletePoll, pollID }) => {
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
-                            Are you sure you want to delete this poll? You can't
-                            undo this action afterwards.
+                            Are you sure you want to delete this poll? You
+                            can&apos;t undo this action afterwards.
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
@@ -50,9 +50,11 @@ const DeleteAlert = ({ deletePoll, pollID }) => {
                             </Button>
                             <Button
                                 colorScheme="red"
-                                onClick={onClose}
                                 ml={3}
-                                onClick={() => deletePoll(pollID)}
+                                onClick={() => {
+                                    deletePoll(pollID);
+                                    onClose();
+                                }}
                             >
                                 Delete
                             </Button>

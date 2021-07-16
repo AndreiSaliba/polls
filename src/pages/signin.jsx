@@ -23,7 +23,7 @@ const Signin = () => {
 
     useEffect(() => {
         currentUser && router.push("/");
-    }, [router]);
+    }, [currentUser, router]);
 
     return (
         <Box>
