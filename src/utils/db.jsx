@@ -125,4 +125,50 @@ export const generateID = () => {
     return id;
 };
 
+export const getUserPolls = (userID) => {
+    if (userID) {
+        return firestore
+            .collection("polls")
+            .where("authorID", "==", userID)
+            .get()
+            .then((querySnapshot) => {
+                let userPolls = [];
+                querySnapshot.forEach((doc) => userPolls.push(doc.data()));
+                return userPolls.sort((a, b) =>
+                    a.dateCreated.seconds <= b.dateCreated.seconds ? 1 : -1
+                );
+            });
+    }
+};
+
+export const deletePoll = (uid, pollID) => {
+    return firestore
+        .collection("polls")
+        .doc(pollID)
+        .delete()
+        .then(() => {
+            firestore
+                .collection("votes")
+                .doc(pollID)
+                .delete()
+                .then(() => {
+                    if (uid) {
+                        firestore
+                            .collection("users")
+                            .doc(uid)
+                            .update({
+                                pollsCreated:
+                                    firebase.firestore.FieldValue.arrayRemove(
+                                        pollID
+                                    ),
+                                pollsVoted:
+                                    firebase.firestore.FieldValue.arrayRemove(
+                                        pollID
+                                    ),
+                            });
+                    }
+                });
+        });
+};
+
 export default firestore;

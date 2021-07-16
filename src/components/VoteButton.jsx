@@ -1,6 +1,6 @@
 import { Box, useColorMode, useRadio } from "@chakra-ui/react";
 
-const VotingButton = (props) => {
+const VoteButton = (props) => {
     const { getInputProps, getCheckboxProps } = useRadio(props);
     const input = getInputProps();
     const checkbox = getCheckboxProps();
@@ -29,4 +29,4 @@ const VotingButton = (props) => {
     );
 };
 
-export default VotingButton;
+export default VoteButton;

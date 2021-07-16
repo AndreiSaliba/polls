@@ -7,14 +7,15 @@ import { addVote } from "../utils/db";
 import {
     Flex,
     Heading,
-    useRadioGroup,
-    useColorMode,
-    Button,
-    useClipboard,
     Text,
+    Button,
+    useColorMode,
+    useClipboard,
+    useRadioGroup,
+    Box,
 } from "@chakra-ui/react";
 import moment from "moment";
-import VotingButton from "./VotingButton";
+import VoteButton from "./VoteButton";
 
 const VoteCard = ({ data }) => {
     const { pollID, title, options, ipChecking, dateCreated } = data;
@@ -66,7 +67,12 @@ const VoteCard = ({ data }) => {
                 justify="space-between"
                 {...group}
             >
-                <Flex justify="space-between" align="flex-end" mb="3">
+                <Flex
+                    justify="space-between"
+                    align="flex-end"
+                    mb="3"
+                    maxWidth="90vw"
+                >
                     <Heading size="lg">{title}</Heading>
                     <Text fontSize="xs" pb="2px">
                         {`${moment(
@@ -76,13 +82,13 @@ const VoteCard = ({ data }) => {
                         }`}
                     </Text>
                 </Flex>
-                {options.map((element) => {
+                {options.map((element, idx) => {
                     const { option: value } = element;
                     const radio = getRadioProps({ value });
                     return (
-                        <VotingButton key={value} {...radio}>
+                        <VoteButton key={value + idx} {...radio}>
                             {value}
-                        </VotingButton>
+                        </VoteButton>
                     );
                 })}
                 <Flex mt="3" justify="space-between" wrap="wrap">

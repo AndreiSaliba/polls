@@ -1,26 +1,23 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AuthContext } from "../utils/Auth";
+import { Avatar, Box, Button, Center, Flex, Heading } from "@chakra-ui/react";
 import firebase from "../utils/firebase";
-import {
-    Avatar,
-    Box,
-    Button,
-    Center,
-    Flex,
-    Heading,
-    useColorMode,
-} from "@chakra-ui/react";
 import Header from "../components/Header";
-import AuthConnection from "../components/AuthConnection";
+import PollCard from "../components/Dashboard/PollCard";
+import AuthCard from "../components/Dashboard/AuthCard";
 
 const Dashboard = () => {
     const { currentUser } = useContext(AuthContext);
-    const { colorMode } = useColorMode();
     const router = useRouter();
+
     useEffect(() => {
-        !currentUser && router.push("/");
-    }, [currentUser, router]);
+        const timeout = setTimeout(() => {
+            !currentUser && router.push("/");
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [currentUser]);
 
     return (
         <Box>
@@ -46,22 +43,8 @@ const Dashboard = () => {
                             Sign Out
                         </Button>
                     </Flex>
-                    <Flex
-                        flexDirection="column"
-                        width="600px"
-                        maxWidth="90vw"
-                        marginTop="7"
-                        padding="5"
-                        borderRadius="lg"
-                        borderWidth="1px"
-                        backgroundColor={
-                            colorMode === "dark" ? "whiteAlpha.200" : "gray.50"
-                        }
-                    >
-                        <AuthConnection providerId="google.com" />
-                        <AuthConnection providerId="twitter.com" />
-                        <AuthConnection providerId="github.com" bottom />
-                    </Flex>
+                    <PollCard />
+                    <AuthCard />
                 </Flex>
             </Center>
         </Box>
