@@ -24,7 +24,6 @@ const ResultProgress = ({ option, votes, total }) => {
                 ></Box>
                 <Text
                     px="5"
-                    position="absolute"
                     gridArea="1/1"
                     alignSelf="center"
                 >
@@ -32,7 +31,6 @@ const ResultProgress = ({ option, votes, total }) => {
                 </Text>
                 <Text
                     px="5"
-                    position="absolute"
                     gridArea="1/1"
                     justifySelf="flex-end"
                     alignSelf="center"
