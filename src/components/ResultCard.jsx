@@ -3,7 +3,6 @@
 import { jsx, css } from "@emotion/react";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../utils/Auth";
-import { addVote } from "../utils/db";
 import {
     Flex,
     Heading,
@@ -17,30 +16,18 @@ import {
 import moment from "moment";
 import numeral from "numeral";
 import VoteButton from "./VoteButton";
+import ResultProgress from "./ResultProgress";
 
-const VoteCard = ({ data, setView, updateData }) => {
-    const { pollID, title, options, ipChecking, dateCreated } = data;
+const ResultCard = ({ data, setView }) => {
+    const { title, options, ipChecking, dateCreated } = data;
     const totalVotes = data.options.reduce(
         (totalVotes, option) => totalVotes + option.count,
         0
     );
 
-    const { currentUser } = useContext(AuthContext);
-    const [selected, setSelected] = useState("");
-
     const { colorMode } = useColorMode();
     const { onCopy } = useClipboard(window.location.href);
-    const { getRootProps, getRadioProps } = useRadioGroup({
-        name: "Poll",
-        onChange: setSelected,
-    });
-    const group = getRootProps();
     const toast = useToast();
-    const [userVotedLocal, setUserVotedLocal] = useState(
-        Array.from(
-            JSON.parse(localStorage.getItem("userVotes")) ?? []
-        ).includes(pollID) || false
-    );
 
     const ButtonCSS = (theme) => `
             margin-top: 5px;
@@ -78,7 +65,6 @@ const VoteCard = ({ data, setView, updateData }) => {
                 borderRadius="lg"
                 flexDirection="column"
                 justify="space-between"
-                {...group}
             >
                 <Flex
                     justify="space-between"
@@ -91,6 +77,7 @@ const VoteCard = ({ data, setView, updateData }) => {
                         flexDirection="column"
                         align="flex-end"
                         justify="center"
+                        ml="3"
                     >
                         <Text fontSize="xs" textAlign="right" pb="2px">
                             {moment(moment.unix(dateCreated.seconds)).fromNow()}
@@ -105,12 +92,14 @@ const VoteCard = ({ data, setView, updateData }) => {
                     </Flex>
                 </Flex>
                 {options.map((element, idx) => {
-                    const { option: value } = element;
-                    const radio = getRadioProps({ value });
+                    const { option, count } = element;
                     return (
-                        <VoteButton key={value + idx} {...radio}>
-                            {value}
-                        </VoteButton>
+                        <ResultProgress
+                            key={idx}
+                            option={option}
+                            votes={count}
+                            total={totalVotes}
+                        />
                     );
                 })}
                 <Flex mt="3" justify="space-between" wrap="wrap">
@@ -125,63 +114,15 @@ const VoteCard = ({ data, setView, updateData }) => {
                                 `,
                                 ButtonCSS,
                             ]}
-                            onClick={() => setView("results")}
+                            onClick={() => setView("vote")}
                         >
-                            Results
+                            Vote
                         </Button>
                     </Flex>
-
-                    <Button
-                        css={[
-                            css`
-                                min-width: 90px;
-                            `,
-                            ButtonCSS,
-                        ]}
-                        isDisabled={userVotedLocal}
-                        onClick={() => {
-                            if (selected) {
-                                addVote(
-                                    pollID,
-                                    currentUser?.uid,
-                                    selected,
-                                    ipChecking
-                                ).then((res) => {
-                                    updateData();
-                                    setUserVotedLocal(true);
-                                    if (res.code === "already-voted") {
-                                        toast({
-                                            description: res.message,
-                                            status: "error",
-                                            duration: 5000,
-                                            isClosable: true,
-                                        });
-
-                                        let array =
-                                            JSON.parse(
-                                                localStorage.getItem(
-                                                    "userVotes"
-                                                )
-                                            ) ?? [];
-                                        array.push(pollID);
-                                        localStorage.setItem(
-                                            "userVotes",
-                                            JSON.stringify(array)
-                                        );
-                                    }
-                                    if (res.code === "success") {
-                                        setView("results");
-                                    }
-                                });
-                            }
-                        }}
-                    >
-                        Vote
-                    </Button>
                 </Flex>
             </Flex>
         </>
     );
 };
 
-export default VoteCard;
+export default ResultCard;

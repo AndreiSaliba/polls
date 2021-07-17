@@ -1,10 +1,11 @@
 import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "../utils/Auth";
+import theme from "../utils/theme";
 
 const MyApp = ({ Component, pageProps }) => {
     return (
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
             <AuthProvider>
                 <Head>
                     <title>Polls</title>

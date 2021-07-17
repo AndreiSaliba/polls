@@ -22,7 +22,7 @@ const Dashboard = () => {
     return (
         <Box>
             <Header />
-            <Center mt="10">
+            <Center mt="10" mb="10">
                 <Flex flexDirection="column" alignItems="center">
                     <Flex
                         p="5"
@@ -43,8 +43,8 @@ const Dashboard = () => {
                             Sign Out
                         </Button>
                     </Flex>
-                    <PollCard />
                     <AuthCard />
+                    <PollCard />
                 </Flex>
             </Center>
         </Box>

@@ -5,15 +5,19 @@ import { Center } from "@chakra-ui/react";
 import Head from "next/head";
 import Header from "../../components/Header";
 import VoteCard from "../../components/VoteCard";
+import ResultCard from "../../components/ResultCard";
 
 const Poll = () => {
     const router = useRouter();
     const { id } = router.query;
     const [pollData, setPollData] = useState();
+    const [view, setView] = useState("vote");
 
-    useEffect(() => {
+    const updateData = () => {
         getPoll(id).then((doc) => setPollData(doc.data()));
-    }, [id]);
+    };
+
+    useEffect(() => updateData(), [id]);
 
     return (
         <>
@@ -22,7 +26,16 @@ const Poll = () => {
             </Head>
             <Header />
             <Center mt="50px">
-                {pollData && <VoteCard data={pollData} />}
+                {pollData &&
+                    (view === "vote" ? (
+                        <VoteCard
+                            data={pollData}
+                            setView={setView}
+                            updateData={updateData}
+                        />
+                    ) : (
+                        <ResultCard data={pollData} setView={setView} />
+                    ))}
             </Center>
         </>
     );

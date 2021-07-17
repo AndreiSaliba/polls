@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import Link from "next/link";
-import { Button, Flex, Text, useColorMode } from "@chakra-ui/react";
+import { Button, Flex, Heading, Text, useColorMode } from "@chakra-ui/react";
 import { deletePoll, getUserPolls } from "../../utils/db";
 import { AuthContext } from "../../utils/Auth";
 import DeleteAlert from "../Dashboard/DeleteAlert";
@@ -26,7 +25,7 @@ const PollCard = () => {
         }
     }, [currentUser]);
 
-    return userPolls ? (
+    return userPolls?.length > 0 ? (
         <Flex
             flexDirection="column"
             width="600px"
@@ -48,7 +47,7 @@ const PollCard = () => {
                         w="100%"
                         mb={idx == userPolls.length - 1 ? "0" : "4"}
                     >
-                        <Text>{title}</Text>
+                        <Text fontSize="lg" fontWeight="semibold">{title}</Text>
                         <Flex>
                             <Button
                                 onClick={() => router.push(`/poll/${pollID}`)}

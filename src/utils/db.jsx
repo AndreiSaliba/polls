@@ -17,6 +17,11 @@ export const createUser = (uid, data) => {
         });
 };
 
+export const generateID = () => {
+    const { id } = firestore.collection("polls").doc();
+    return id;
+};
+
 export const createPoll = (uid, docID, data) => {
     return firestore
         .collection("polls")
@@ -57,7 +62,7 @@ export const addVote = async (id, uid, option, ipChecking) => {
         : null;
     const addCount = async () => {
         const index = data.options.findIndex((item) => item.option === option);
-        data.options[index].count++;
+        data.options[index].count += 1;
         return firestore
             .collection("polls")
             .doc(id)
@@ -113,16 +118,16 @@ export const addVote = async (id, uid, option, ipChecking) => {
         addCount();
     } else {
         console.error("You have already voted in this poll.");
+        return {
+            code: "already-voted",
+            message: "You have already voted in this poll.",
+        };
     }
+    return { code: "success" };
 };
 
 export const getPoll = (id) => {
     return firestore.collection("polls").doc(id).get();
-};
-
-export const generateID = () => {
-    const { id } = firestore.collection("polls").doc();
-    return id;
 };
 
 export const getUserPolls = (userID) => {
