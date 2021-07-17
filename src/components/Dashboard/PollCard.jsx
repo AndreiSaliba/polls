@@ -5,32 +5,30 @@ import { deletePoll, getUserPolls } from "../../utils/db";
 import { AuthContext } from "../../utils/Auth";
 import DeleteAlert from "../Dashboard/DeleteAlert";
 
-const PollCard = () => {
+const PollCard = ({ setEmpty }) => {
+    const [userPolls, setUserPolls] = useState();
     const { currentUser } = useContext(AuthContext);
     const { colorMode } = useColorMode();
     const router = useRouter();
-    const [userPolls, setUserPolls] = useState();
-
-    const delPoll = (pollID) => {
-        deletePoll(currentUser?.uid, pollID).then(() =>
-            setUserPolls(userPolls.filter((item) => item.pollID != pollID))
-        );
-    };
 
     useEffect(() => {
         if (currentUser) {
-            getUserPolls(currentUser.uid).then((userPolls) =>
-                setUserPolls(userPolls)
-            );
+            getUserPolls(currentUser.uid).then((userPolls) => {
+                setUserPolls(userPolls);
+            });
         }
     }, [currentUser]);
+
+    useEffect(() => {
+        setEmpty(userPolls?.length <= 0);
+    }, [userPolls]);
 
     return userPolls?.length > 0 ? (
         <Flex
             flexDirection="column"
             width="600px"
             maxWidth="90vw"
-            marginTop="7"
+            marginTop="5"
             padding="5"
             borderRadius="lg"
             borderWidth="1px"
@@ -47,14 +45,29 @@ const PollCard = () => {
                         w="100%"
                         mb={idx == userPolls.length - 1 ? "0" : "4"}
                     >
-                        <Text fontSize="lg" fontWeight="semibold">{title}</Text>
+                        <Text fontSize="lg" fontWeight="semibold">
+                            {title}
+                        </Text>
                         <Flex>
                             <Button
                                 onClick={() => router.push(`/poll/${pollID}`)}
                             >
                                 View Poll
                             </Button>
-                            <DeleteAlert deletePoll={delPoll} pollID={pollID} />
+                            <DeleteAlert
+                                pollID={pollID}
+                                deletePoll={(pollID) => {
+                                    deletePoll(currentUser?.uid, pollID).then(
+                                        () =>
+                                            setUserPolls(
+                                                userPolls.filter(
+                                                    (item) =>
+                                                        item.pollID != pollID
+                                                )
+                                            )
+                                    );
+                                }}
+                            />
                         </Flex>
                     </Flex>
                 );

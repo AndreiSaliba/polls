@@ -2,6 +2,7 @@ import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "../utils/Auth";
 import theme from "../utils/theme";
+import "../../styles/globals.css";
 
 const MyApp = ({ Component, pageProps }) => {
     return (

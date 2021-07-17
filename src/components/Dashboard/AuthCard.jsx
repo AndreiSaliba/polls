@@ -8,7 +8,7 @@ const AuthCard = () => {
             flexDirection="column"
             width="600px"
             maxWidth="90vw"
-            marginTop="7"
+            marginTop="5"
             padding="5"
             borderRadius="lg"
             borderWidth="1px"

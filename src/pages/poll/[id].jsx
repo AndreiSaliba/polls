@@ -14,7 +14,17 @@ const Poll = () => {
     const [view, setView] = useState("vote");
 
     const updateData = () => {
-        getPoll(id).then((doc) => setPollData(doc.data()));
+        getPoll(id).then((doc) => {
+            setPollData(doc.data());
+            if (
+                Array.from(
+                    JSON.parse(localStorage.getItem("userVotes")) ?? []
+                ).includes(doc.data()?.pollID) ||
+                false
+            ) {
+                setView("results");
+            }
+        });
     };
 
     useEffect(() => updateData(), [id]);
@@ -22,7 +32,7 @@ const Poll = () => {
     return (
         <>
             <Head>
-                <title>{`${pollData?.title} - Polls`}</title>
+                <title>{pollData?.title}</title>
             </Head>
             <Header />
             <Center mt="50px">

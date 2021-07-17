@@ -11,6 +11,7 @@ import {
     Input,
     useColorMode,
     Checkbox,
+    useToast,
 } from "@chakra-ui/react";
 import router from "next/router";
 
@@ -20,6 +21,7 @@ const CreatePoll = () => {
     const [title, setTitle] = useState("");
     const [fields, setFields] = useState(["", ""]);
     const [ipChecking, setIpChecking] = useState(false);
+    const toast = useToast();
 
     const submitPoll = () => {
         const optionArray = fields
@@ -27,7 +29,22 @@ const CreatePoll = () => {
             .map((element) => {
                 return { option: element, count: 0 };
             });
-        if (optionArray.length > 1) {
+        if (!title) {
+            toast({
+                description: "Title is required",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+        if (optionArray.length <= 1) {
+            toast({
+                description: "At least 2 options are required.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        } else {
             const id = generateID();
             createPoll(currentUser?.uid, id, {
                 title: title,
@@ -111,25 +128,12 @@ const CreatePoll = () => {
                 </Box>
             </Box>
             <Flex align="center" justify="space-between" mt="5">
-                {/* <Flex
-                    // flexDirection="column"
-                    // justifyContent="space-between"
-                    minH="100%"
-                > */}
-                {/* <Checkbox
-                        mb="0.5"
-                        isChecked={multipleAnswers}
-                        onChange={(e) => setMultipleAnswers(e.target.checked)}
-                    >
-                        Allow multiple poll answers
-                    </Checkbox> */}
                 <Checkbox
                     isChecked={ipChecking}
                     onChange={(e) => setIpChecking(e.target.checked)}
                 >
                     IP Duplication Checking
                 </Checkbox>
-                {/* </Flex> */}
                 <Button
                     onClick={submitPoll}
                     css={(theme) => `

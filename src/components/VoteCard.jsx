@@ -27,6 +27,11 @@ const VoteCard = ({ data, setView, updateData }) => {
 
     const { currentUser } = useContext(AuthContext);
     const [selected, setSelected] = useState("");
+    const [userVotedLocal, setUserVotedLocal] = useState(
+        Array.from(
+            JSON.parse(localStorage.getItem("userVotes")) ?? []
+        ).includes(pollID) || false
+    );
 
     const { colorMode } = useColorMode();
     const { onCopy } = useClipboard(window.location.href);
@@ -36,11 +41,6 @@ const VoteCard = ({ data, setView, updateData }) => {
     });
     const group = getRootProps();
     const toast = useToast();
-    const [userVotedLocal, setUserVotedLocal] = useState(
-        Array.from(
-            JSON.parse(localStorage.getItem("userVotes")) ?? []
-        ).includes(pollID) || false
-    );
 
     const ButtonCSS = (theme) => `
             margin-top: 5px;
