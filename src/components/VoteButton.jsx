@@ -11,17 +11,16 @@ const VoteButton = (props) => {
             <input {...input} />
             <Box
                 {...checkbox}
-                cursor="pointer"
-                borderRadius="md"
-                boxShadow="sm"
+                px={5}
+                py={3}
+                mb={1.5}
                 bg={colorMode === "dark" ? "whiteAlpha.200" : "gray.200"}
+                borderRadius="md"
+                cursor="pointer"
                 _checked={{
                     bg: "blue.500",
                     color: "white",
                 }}
-                px={5}
-                py={3}
-                mb={1.5}
             >
                 {props.children}
             </Box>

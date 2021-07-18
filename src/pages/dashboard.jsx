@@ -9,9 +9,9 @@ import {
     Flex,
     Heading,
     Tabs,
+    Tab,
     TabList,
     TabPanels,
-    Tab,
     TabPanel,
 } from "@chakra-ui/react";
 import firebase from "../utils/firebase";
@@ -48,11 +48,11 @@ const Dashboard = () => {
                 <Center mt="10" mb="10">
                     <Flex flexDirection="column" alignItems="center">
                         <Flex
-                            p="5"
-                            width="500px"
-                            maxWidth="90vw"
                             flexDir="column"
                             align="center"
+                            w="500px"
+                            maxW="90vw"
+                            p="5"
                         >
                             <Avatar
                                 size="xl"

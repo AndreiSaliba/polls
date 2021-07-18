@@ -19,7 +19,7 @@ const Header = ({ themeButtonOnly }) => {
         <Flex
             align="center"
             justify={themeButtonOnly ? "flex-end" : "space-between"}
-            width="90vw"
+            w="90vw"
             m="auto"
             mt="7"
         >

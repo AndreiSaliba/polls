@@ -28,10 +28,10 @@ const DeleteAlert = ({ deletePoll, pollID }) => {
             </IconButton>
 
             <AlertDialog
-                isOpen={isOpen}
                 leastDestructiveRef={cancelRef}
-                onClose={onClose}
                 isCentered
+                isOpen={isOpen}
+                onClose={onClose}
             >
                 <AlertDialogOverlay>
                     <AlertDialogContent>
@@ -49,8 +49,8 @@ const DeleteAlert = ({ deletePoll, pollID }) => {
                                 Cancel
                             </Button>
                             <Button
-                                colorScheme="red"
                                 ml={3}
+                                colorScheme="red"
                                 onClick={() => {
                                     deletePoll(pollID);
                                     onClose();

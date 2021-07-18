@@ -1,8 +1,9 @@
 import { Flex, useColorMode } from "@chakra-ui/react";
-import AuthConnection from "../AuthConnection";
+import AuthConnection from "./AuthConnection";
 
 const AuthCard = () => {
     const { colorMode } = useColorMode();
+    
     return (
         <Flex
             flexDirection="column"

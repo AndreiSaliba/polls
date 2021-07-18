@@ -2,10 +2,10 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
 import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../utils/Auth";
-import firebase from "../utils/firebase";
+import { AuthContext } from "../../utils/Auth";
 import { Button, Flex, Heading, Text, useColorMode } from "@chakra-ui/react";
 import { FaGoogle, FaGithub, FaTwitter } from "react-icons/fa";
+import firebase from "../../utils/firebase";
 
 const AuthConnection = ({ providerId, bottom }) => {
     const { currentUser } = useContext(AuthContext);
@@ -96,10 +96,10 @@ const AuthConnection = ({ providerId, bottom }) => {
     `;
 
     return (
-        <Flex w="100%" mb={bottom ? "0" : "7"} justify="space-between">
+        <Flex justify="space-between" w="100%" mb={bottom ? "0" : "7"}>
             <Flex align="center">
                 <AuthIcon name={name} />
-                <Flex ml="3" flexDirection="column">
+                <Flex flexDirection="column" ml="3">
                     <Heading size="sm">{name}</Heading>
                     <Text fontSize="14px" css={emailTextCSS}>
                         {

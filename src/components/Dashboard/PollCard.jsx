@@ -26,15 +26,13 @@ const PollCard = ({ setEmpty }) => {
     return userPolls?.length > 0 ? (
         <Flex
             flexDirection="column"
-            width="600px"
-            maxWidth="90vw"
-            marginTop="5"
-            padding="5"
+            w="600px"
+            maxW="90vw"
+            mt="5"
+            p="5"
+            bg={colorMode === "dark" ? "whiteAlpha.200" : "gray.50"}
             borderRadius="lg"
             borderWidth="1px"
-            backgroundColor={
-                colorMode === "dark" ? "whiteAlpha.200" : "gray.50"
-            }
         >
             {userPolls.map((element, idx) => {
                 const { pollID, title } = element;

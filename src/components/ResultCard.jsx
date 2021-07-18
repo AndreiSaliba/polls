@@ -1,21 +1,18 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
-import React, { useContext, useState } from "react";
-import { AuthContext } from "../utils/Auth";
+import React from "react";
 import {
     Flex,
+    Button,
     Heading,
     Text,
-    Button,
     useColorMode,
     useClipboard,
-    useRadioGroup,
     useToast,
 } from "@chakra-ui/react";
 import moment from "moment";
 import numeral from "numeral";
-import VoteButton from "./VoteButton";
 import ResultProgress from "./ResultProgress";
 
 const ResultCard = ({ data, setView }) => {
@@ -25,8 +22,8 @@ const ResultCard = ({ data, setView }) => {
         0
     );
 
-    const { colorMode } = useColorMode();
     const { onCopy } = useClipboard(window.location.href);
+    const { colorMode } = useColorMode();
     const toast = useToast();
 
     const ButtonCSS = (theme) => `
@@ -55,23 +52,16 @@ const ResultCard = ({ data, setView }) => {
     return (
         <>
             <Flex
-                w="600px"
-                maxWidth="90vw"
-                p="5"
-                borderWidth="1px"
-                backgroundColor={`${
-                    colorMode === "dark" ? "whiteAlpha.200" : "gray.50"
-                }`}
-                borderRadius="lg"
                 flexDirection="column"
                 justify="space-between"
+                w="600px"
+                maxW="90vw"
+                p="5"
+                bg={`${colorMode === "dark" ? "whiteAlpha.200" : "gray.50"}`}
+                borderRadius="lg"
+                borderWidth="1px"
             >
-                <Flex
-                    justify="space-between"
-                    align="center"
-                    mb="3"
-                    maxWidth="90vw"
-                >
+                <Flex justify="space-between" align="center" maxW="90vw" mb="3">
                     <Heading size="lg">{title}</Heading>
                     <Flex
                         flexDirection="column"
@@ -102,9 +92,20 @@ const ResultCard = ({ data, setView }) => {
                         />
                     );
                 })}
-                <Flex mt="3" justify="space-between" wrap="wrap">
+                <Flex justify="space-between" wrap="wrap" mt="3">
                     <Flex wrap="wrap">
-                        <Button css={ButtonCSS} onClick={onCopy}>
+                        <Button
+                            css={ButtonCSS}
+                            onClick={() => {
+                                onCopy();
+                                toast({
+                                    description: "Link Copied",
+                                    status: "info",
+                                    duration: 3000,
+                                    isClosable: true,
+                                });
+                            }}
+                        >
                             Copy Link
                         </Button>
                         <Button
