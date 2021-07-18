@@ -22,7 +22,7 @@ const ResultProgress = ({ option, votes, total }) => {
                     bg={"blue.500"}
                     borderRadius="md"
                 ></Box>
-                <Text gridArea="1/1" alignSelf="center" px="5" marginR="8">
+                <Text gridArea="1/1" alignSelf="center" px="5" marginRight="8">
                     {option}
                 </Text>
                 <Text

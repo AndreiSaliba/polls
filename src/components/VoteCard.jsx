@@ -115,7 +115,18 @@ const VoteCard = ({ data, setView, updateData }) => {
                 })}
                 <Flex mt="3" justify="space-between" wrap="wrap">
                     <Flex wrap="wrap">
-                        <Button css={ButtonCSS} onClick={onCopy}>
+                        <Button
+                            css={ButtonCSS}
+                            onClick={() => {
+                                onCopy();
+                                toast({
+                                    description: "Link Copied",
+                                    status: "info",
+                                    duration: 3000,
+                                    isClosable: true,
+                                });
+                            }}
+                        >
                             Copy Link
                         </Button>
                         <Button
@@ -170,6 +181,13 @@ const VoteCard = ({ data, setView, updateData }) => {
                                         );
                                     }
                                     if (res.code === "success") {
+                                        toast({
+                                            description:
+                                                "Your vote has been counted",
+                                            status: "info",
+                                            duration: 3000,
+                                            isClosable: true,
+                                        });
                                         setView("results");
                                     }
                                 });

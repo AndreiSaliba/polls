@@ -52,7 +52,16 @@ const CreatePoll = () => {
                 authorID: currentUser?.uid ?? null,
                 dateCreated: new Date(),
                 ipChecking,
-            }).then(router.push(`/poll/${id}`));
+            })
+                .then(router.push(`/poll/${id}`))
+                .then(
+                    toast({
+                        description: "Poll has been created.",
+                        status: "info",
+                        duration: 3000,
+                        isClosable: true,
+                    })
+                );
             setTitle("");
             setFields(["", ""]);
             setIpChecking(false);
@@ -99,7 +108,7 @@ const CreatePoll = () => {
         >
             <Box>
                 <Input
-                    placeholder="Enter title"
+                    placeholder="Enter a title"
                     value={title}
                     onChange={(e) => setTitle(e.currentTarget.value)}
                     css={InputCSS}
