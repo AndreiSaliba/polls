@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import NextLink from "next/link";
+import Link from "next/link";
 import { AuthContext } from "../utils/Auth";
 import {
     Flex,
@@ -24,13 +24,13 @@ const Header = ({ themeButtonOnly }) => {
             mt="7"
         >
             {!themeButtonOnly && (
-                <NextLink href="/">
+                <Link href="/">
                     <a>
                         <Heading fontSize="3xl" fontWeight="bold">
                             Polls
                         </Heading>
                     </a>
-                </NextLink>
+                </Link>
             )}
 
             {themeButtonOnly ? (
@@ -44,22 +44,24 @@ const Header = ({ themeButtonOnly }) => {
             ) : (
                 <Flex align="center">
                     {currentUser ? (
-                        <NextLink href="/dashboard">
-                            <Avatar
-                                mr="3"
-                                w="40px"
-                                h="40px"
-                                src={currentUser?.photoURL}
-                            />
-                        </NextLink>
+                        <Link href="/dashboard">
+                            <a>
+                                <Avatar
+                                    mr="3"
+                                    w="40px"
+                                    h="40px"
+                                    src={currentUser?.photoURL}
+                                />
+                            </a>
+                        </Link>
                     ) : (
-                        <NextLink href="/signin">
+                        <Link href="/signin">
                             <a>
                                 <Button aria-label="Sign In" mr="2">
                                     Sign In
                                 </Button>
                             </a>
-                        </NextLink>
+                        </Link>
                     )}
 
                     <IconButton

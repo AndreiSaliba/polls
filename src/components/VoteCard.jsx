@@ -155,8 +155,7 @@ const VoteCard = ({ data, setView, updateData }) => {
                                 addVote(
                                     pollID,
                                     currentUser?.uid,
-                                    selected,
-                                    ipChecking
+                                    selected
                                 ).then((res) => {
                                     updateData();
                                     setUserVotedLocal(true);

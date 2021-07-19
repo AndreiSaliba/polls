@@ -18,8 +18,7 @@ export const createUser = (uid, data) => {
 };
 
 export const generateID = () => {
-    const { id } = firestore.collection("polls").doc();
-    return id;
+    return firestore.collection("polls").doc().id;
 };
 
 export const createPoll = (uid, docID, data) => {
@@ -47,19 +46,23 @@ export const createPoll = (uid, docID, data) => {
 };
 
 export const addVote = async (id, uid, option, ipChecking) => {
-    const localVotes = JSON.parse(localStorage.getItem("userVotes")) || [];
-    const userVoted = await firestore
-        .collection("users")
-        .doc(uid)
-        .get()
-        .then((doc) => doc.data())
-        .then((data) => data?.pollsVoted.includes(id));
     const data = await getPoll(id).then((doc) => doc.data());
     const ip = data.ipChecking
         ? await fetch("https://api.ipify.org")
               .then((data) => data.text())
               .catch(null)
         : null;
+    const localVotes = JSON.parse(localStorage.getItem("userVotes")) || [];
+    let userVoted;
+    if (uid) {
+        userVoted = await firestore
+            .collection("users")
+            .doc(uid)
+            .get()
+            .then((doc) => doc.data())
+            .then((data) => data?.pollsVoted.includes(id));
+    }
+
     const addCount = async () => {
         const index = data.options.findIndex((item) => item.option === option);
         data.options[index].count += 1;
@@ -77,7 +80,7 @@ export const addVote = async (id, uid, option, ipChecking) => {
                                 firebase.firestore.FieldValue.arrayUnion(id),
                         });
                 }
-                if (ipChecking) {
+                if (data.ipChecking) {
                     firestore
                         .collection("votes")
                         .doc(id)
@@ -89,8 +92,11 @@ export const addVote = async (id, uid, option, ipChecking) => {
                 }
                 if (!localVotes.includes(id)) {
                     localVotes.push(id);
+                    localStorage.setItem(
+                        "userVotes",
+                        JSON.stringify(localVotes)
+                    );
                 }
-                localStorage.setItem("userVotes", JSON.stringify(localVotes));
             });
     };
     const hasIPVoted = () => {
@@ -102,11 +108,9 @@ export const addVote = async (id, uid, option, ipChecking) => {
             .then((querySnapshot) => querySnapshot.empty);
     };
 
-    if (!userVoted && uid) {
-        console.log("User");
+    if (uid && !userVoted) {
         addCount();
     } else if (!localVotes.includes(id) && !ip && !userVoted) {
-        console.log("Local");
         addCount();
     } else if (
         (await hasIPVoted()) &&
@@ -114,7 +118,6 @@ export const addVote = async (id, uid, option, ipChecking) => {
         ip &&
         !userVoted
     ) {
-        console.log("Ip");
         addCount();
     } else {
         console.error("You have already voted in this poll.");

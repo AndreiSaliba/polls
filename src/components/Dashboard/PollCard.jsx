@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { Button, Flex, Heading, Text, useColorMode } from "@chakra-ui/react";
 import { deletePoll, getUserPolls } from "../../utils/db";
@@ -9,7 +9,6 @@ const PollCard = ({ setEmpty }) => {
     const [userPolls, setUserPolls] = useState();
     const { currentUser } = useContext(AuthContext);
     const { colorMode } = useColorMode();
-    const router = useRouter();
 
     useEffect(() => {
         if (currentUser) {
@@ -47,11 +46,12 @@ const PollCard = ({ setEmpty }) => {
                             {title}
                         </Text>
                         <Flex>
-                            <Button
-                                onClick={() => router.push(`/poll/${pollID}`)}
-                            >
-                                View Poll
-                            </Button>
+                            <Link href={`/poll/${pollID}`}>
+                                <a>
+                                    <Button>View Poll</Button>
+                                </a>
+                            </Link>
+
                             <DeleteAlert
                                 pollID={pollID}
                                 deletePoll={(pollID) => {
