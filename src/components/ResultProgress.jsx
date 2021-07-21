@@ -19,7 +19,7 @@ const ResultProgress = ({ option, votes, total }) => {
                     maxW={percent + "%"}
                     h="100%"
                     py={3}
-                    bg={"blue.500"}
+                    bg={colorMode === "dark" ? "blue.500" : "blue.400"}
                     borderRadius="md"
                 ></Box>
                 <Text gridArea="1/1" alignSelf="center" px="5" marginRight="8">

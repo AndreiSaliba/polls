@@ -18,8 +18,7 @@ const VoteButton = (props) => {
                 borderRadius="md"
                 cursor="pointer"
                 _checked={{
-                    bg: "blue.500",
-                    color: "white",
+                    bg: colorMode === "dark" ? "blue.500" : "blue.400",
                 }}
             >
                 {props.children}

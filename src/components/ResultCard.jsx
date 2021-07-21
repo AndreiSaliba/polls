@@ -10,6 +10,7 @@ import {
     useColorMode,
     useClipboard,
     useToast,
+    Tooltip,
 } from "@chakra-ui/react";
 import moment from "moment";
 import numeral from "numeral";
@@ -69,9 +70,20 @@ const ResultCard = ({ data, setView }) => {
                         justify="center"
                         ml="3"
                     >
-                        <Text fontSize="xs" textAlign="right" pb="2px">
-                            {moment(moment.unix(dateCreated.seconds)).fromNow()}
-                        </Text>
+                         <Tooltip
+                            label={moment(
+                                moment.unix(dateCreated.seconds)
+                            ).format("Do MMMM YYYY - H:mm")}
+                            placement="top"
+                            bg={colorMode === "dark" ? "gray.600" : "gray.300"}
+                            color={colorMode === "dark" ? "white" : "black"}
+                        >
+                            <Text fontSize="xs" textAlign="right" pb="2px">
+                                {moment(
+                                    moment.unix(dateCreated.seconds)
+                                ).fromNow()}
+                            </Text>
+                        </Tooltip>
                         <Text fontSize="xs" textAlign="right">{`${numeral(
                             totalVotes
                         ).format("0.[0]a")} ${

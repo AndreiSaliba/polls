@@ -13,6 +13,7 @@ import {
     useClipboard,
     useRadioGroup,
     useToast,
+    Tooltip,
 } from "@chakra-ui/react";
 import moment from "moment";
 import numeral from "numeral";
@@ -92,9 +93,21 @@ const VoteCard = ({ data, setView, updateData, ipAddress }) => {
                         align="flex-end"
                         justify="center"
                     >
-                        <Text fontSize="xs" textAlign="right" pb="2px">
-                            {moment(moment.unix(dateCreated.seconds)).fromNow()}
-                        </Text>
+                        <Tooltip
+                            label={moment(
+                                moment.unix(dateCreated.seconds)
+                            ).format("Do MMMM YYYY - H:mm")}
+                            placement="top"
+                            bg={colorMode === "dark" ? "gray.600" : "gray.300"}
+                            color={colorMode === "dark" ? "white" : "black"}
+                        >
+                            <Text fontSize="xs" textAlign="right" pb="2px">
+                                {moment(
+                                    moment.unix(dateCreated.seconds)
+                                ).fromNow()}
+                            </Text>
+                        </Tooltip>
+
                         <Text fontSize="xs" textAlign="right">{`${numeral(
                             totalVotes
                         ).format("0.[0]a")} ${
