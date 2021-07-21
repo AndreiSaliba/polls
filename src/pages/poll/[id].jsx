@@ -13,8 +13,6 @@ const Poll = ({ ip }) => {
     const [pollData, setPollData] = useState();
     const [view, setView] = useState("vote");
 
-    console.log(ip);
-
     const updateData = () => {
         getPoll(id).then((doc) => {
             setPollData(doc.data());
@@ -44,6 +42,7 @@ const Poll = ({ ip }) => {
                             data={pollData}
                             setView={setView}
                             updateData={updateData}
+                            ipAddress={ip}
                         />
                     ) : (
                         <ResultCard data={pollData} setView={setView} />
@@ -55,7 +54,7 @@ const Poll = ({ ip }) => {
 
 export default Poll;
 
-Poll.getInitialProps = async ({ req, res }) => {
-    const ip = req.connection.remoteAddress;
-    return { ip };
+export const getServerSideProps = async ({ req, res }) => {
+    const ip = req.headers["x-real-ip"] || null;
+    return { props: { ip } };
 };

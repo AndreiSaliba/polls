@@ -1,5 +1,8 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx, css } from "@emotion/react";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Flex, Heading, Text, useColorMode } from "@chakra-ui/react";
 import { deletePoll, getUserPolls } from "../../utils/db";
 import { AuthContext } from "../../utils/Auth";
@@ -45,7 +48,11 @@ const PollCard = ({ setEmpty }) => {
                         <Text fontSize="lg" fontWeight="semibold">
                             {title}
                         </Text>
-                        <Flex>
+                        <Flex
+                            css={css`
+                                margin-left: 10px;
+                            `}
+                        >
                             <Link href={`/poll/${pollID}`}>
                                 <a>
                                     <Button>View Poll</Button>

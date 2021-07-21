@@ -45,13 +45,8 @@ export const createPoll = (uid, docID, data) => {
         });
 };
 
-export const addVote = async (id, uid, option, ipChecking) => {
+export const addVote = async (id, uid, option, ipAddress = null) => {
     const data = await getPoll(id).then((doc) => doc.data());
-    const ip = data.ipChecking
-        ? await fetch("https://api.ipify.org")
-              .then((data) => data.text())
-              .catch(null)
-        : null;
     const localVotes = JSON.parse(localStorage.getItem("userVotes")) || [];
     let userVoted;
     if (uid) {
@@ -86,7 +81,7 @@ export const addVote = async (id, uid, option, ipChecking) => {
                         .doc(id)
                         .update({
                             ipList: firebase.firestore.FieldValue.arrayUnion(
-                                ip
+                                ipAddress
                             ),
                         });
                 }
@@ -100,23 +95,25 @@ export const addVote = async (id, uid, option, ipChecking) => {
             });
     };
     const hasIPVoted = () => {
-        return firestore
-            .collection("votes")
-            .where("pollID", "==", id)
-            .where("ipList", "array-contains", ip)
-            .get()
-            .then((querySnapshot) => querySnapshot.empty);
+        if (ipAddress) {
+            return firestore
+                .collection("votes")
+                .where("pollID", "==", id)
+                .where("ipList", "array-contains", ipAddress)
+                .get()
+                .then((querySnapshot) => !querySnapshot.empty);
+        }
     };
 
     if (uid && !userVoted) {
         addCount();
-    } else if (!localVotes.includes(id) && !ip && !userVoted) {
+    } else if (!localVotes.includes(id) && !data.ipChecking && !userVoted) {
         addCount();
     } else if (
-        (await hasIPVoted()) &&
+        !userVoted &&
+        data.ipChecking &&
         !localVotes.includes(id) &&
-        ip &&
-        !userVoted
+        !(await hasIPVoted())
     ) {
         addCount();
     } else {

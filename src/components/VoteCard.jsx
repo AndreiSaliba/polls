@@ -18,7 +18,7 @@ import moment from "moment";
 import numeral from "numeral";
 import VoteButton from "./VoteButton";
 
-const VoteCard = ({ data, setView, updateData }) => {
+const VoteCard = ({ data, setView, updateData, ipAddress }) => {
     const { pollID, title, options, ipChecking, dateCreated } = data;
     const totalVotes = data.options.reduce(
         (totalVotes, option) => totalVotes + option.count,
@@ -155,7 +155,8 @@ const VoteCard = ({ data, setView, updateData }) => {
                                 addVote(
                                     pollID,
                                     currentUser?.uid,
-                                    selected
+                                    selected,
+                                    ipAddress
                                 ).then((res) => {
                                     updateData();
                                     setUserVotedLocal(true);
