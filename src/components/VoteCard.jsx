@@ -116,7 +116,12 @@ const VoteCard = ({ data, setView, updateData }) => {
                 <Flex mt="3" justify="space-between" wrap="wrap">
                     <Flex wrap="wrap">
                         <Button
-                            css={ButtonCSS}
+                            css={[
+                                css`
+                                    margin-right: 5px;
+                                `,
+                                ButtonCSS,
+                            ]}
                             onClick={() => {
                                 onCopy();
                                 toast({
@@ -130,12 +135,7 @@ const VoteCard = ({ data, setView, updateData }) => {
                             Copy Link
                         </Button>
                         <Button
-                            css={[
-                                css`
-                                    margin-left: 5px;
-                                `,
-                                ButtonCSS,
-                            ]}
+                            css={ButtonCSS}
                             onClick={() => setView("results")}
                         >
                             Results

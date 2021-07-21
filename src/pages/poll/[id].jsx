@@ -7,11 +7,13 @@ import Header from "../../components/Header";
 import VoteCard from "../../components/VoteCard";
 import ResultCard from "../../components/ResultCard";
 
-const Poll = () => {
+const Poll = ({ ip }) => {
     const router = useRouter();
     const { id } = router.query;
     const [pollData, setPollData] = useState();
     const [view, setView] = useState("vote");
+
+    console.log(ip);
 
     const updateData = () => {
         getPoll(id).then((doc) => {
@@ -52,3 +54,8 @@ const Poll = () => {
 };
 
 export default Poll;
+
+Poll.getInitialProps = async ({ req, res }) => {
+    const ip = req.connection.remoteAddress;
+    return { ip };
+};
