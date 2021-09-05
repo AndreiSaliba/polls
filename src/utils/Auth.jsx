@@ -11,10 +11,10 @@ export const AuthProvider = ({ children }) => {
     const router = useRouter();
     const toast = useToast();
 
-    const signinWithGoogle = () => {
+    const signinWithAuthProvider = (provider, verifyEmail) => {
         return firebase
             .auth()
-            .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+            .signInWithPopup(provider)
             .then((res) => {
                 const user = res.user;
                 if (user) {
@@ -24,7 +24,14 @@ export const AuthProvider = ({ children }) => {
                         pollsCreated: [],
                         pollsVoted: [],
                     });
-                    router.push("/");
+                }
+                if (verifyEmail) {
+                    if (!user.emailVerified) {
+                        firebase.auth().currentUser.sendEmailVerification();
+                        router.push("/verify");
+                    } else if (user.emailVerified) {
+                        router.push("/");
+                    }
                 }
             })
             .catch((error) => {
@@ -42,82 +49,18 @@ export const AuthProvider = ({ children }) => {
                     });
                 }
             });
+    };
+
+    const signinWithGoogle = () => {
+        signinWithAuthProvider(new firebase.auth.GoogleAuthProvider(), false);
     };
 
     const signinWithTwitter = () => {
-        return firebase
-            .auth()
-            .signInWithPopup(new firebase.auth.TwitterAuthProvider())
-            .then((res) => {
-                const user = res.user;
-                if (user) {
-                    setCurrentUser(user);
-                    createUser(user.uid, {
-                        email: user.email,
-                        pollsCreated: [],
-                        pollsVoted: [],
-                    });
-                }
-                if (!user.emailVerified) {
-                    firebase.auth().currentUser.sendEmailVerification();
-                    router.push("/verify");
-                } else if (user.emailVerified) {
-                    router.push("/");
-                }
-            })
-            .catch((error) => {
-                if (
-                    error.code ==
-                    "auth/account-exists-with-different-credential"
-                ) {
-                    toast({
-                        title: "Your account is linked to a different Auth Provider",
-                        description:
-                            "Please sign in with the provider that is linked to your account.",
-                        status: "error",
-                        isClosable: true,
-                        duration: 10000,
-                    });
-                }
-            });
+        signinWithAuthProvider(new firebase.auth.TwitterAuthProvider(), true);
     };
 
     const signinWithGithub = () => {
-        return firebase
-            .auth()
-            .signInWithPopup(new firebase.auth.GithubAuthProvider())
-            .then((res) => {
-                const user = res.user;
-                if (user) {
-                    setCurrentUser(user);
-                    createUser(user.uid, {
-                        email: user.email,
-                        pollsCreated: [],
-                        pollsVoted: [],
-                    });
-                }
-                if (!user.emailVerified) {
-                    firebase.auth().currentUser.sendEmailVerification();
-                    router.push("/verify");
-                } else if (user.emailVerified) {
-                    router.push("/");
-                }
-            })
-            .catch((error) => {
-                if (
-                    error.code ==
-                    "auth/account-exists-with-different-credential"
-                ) {
-                    toast({
-                        title: "Your account is linked to a different Auth Provider",
-                        description:
-                            "Please sign in with the provider that is linked to your account.",
-                        status: "error",
-                        isClosable: true,
-                        duration: 10000,
-                    });
-                }
-            });
+        signinWithAuthProvider(new firebase.auth.GithubAuthProvider(), true);
     };
 
     const signOut = () => {

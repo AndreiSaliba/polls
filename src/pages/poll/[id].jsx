@@ -16,14 +16,9 @@ const Poll = ({ ip }) => {
     const updateData = () => {
         getPoll(id).then((doc) => {
             setPollData(doc.data());
-            if (
-                Array.from(
-                    JSON.parse(localStorage.getItem("userVotes")) ?? []
-                ).includes(doc.data()?.pollID) ||
-                false
-            ) {
-                setView("results");
-            }
+            Array.from(
+                JSON.parse(localStorage.getItem("userVotes")) ?? []
+            ).includes(doc.data()?.pollID) && setView("results");
         });
     };
 

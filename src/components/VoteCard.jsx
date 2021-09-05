@@ -31,7 +31,7 @@ const VoteCard = ({ data, setView, updateData, ipAddress }) => {
     const [userVotedLocal, setUserVotedLocal] = useState(
         Array.from(
             JSON.parse(localStorage.getItem("userVotes")) ?? []
-        ).includes(pollID) || false
+        ).includes(pollID)
     );
 
     const { colorMode } = useColorMode();

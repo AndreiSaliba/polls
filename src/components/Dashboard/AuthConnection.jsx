@@ -31,33 +31,13 @@ const AuthConnection = ({ providerId, bottom }) => {
     }
 
     const AuthIcon = ({ name }) => {
-        if (name === "Google") {
-            return (
-                <FaGoogle
-                    css={css`
-                        width: 34px;
-                        height: 34px;
-                    `}
-                />
-            );
-        } else if (name === "Twitter") {
-            return (
-                <FaTwitter
-                    css={css`
-                        width: 34px;
-                        height: 34px;
-                    `}
-                />
-            );
-        } else if (name === "Github") {
-            return (
-                <FaGithub
-                    css={css`
-                        width: 34px;
-                        height: 34px;
-                    `}
-                />
-            );
+        switch (name) {
+            case "Google":
+                return <FaGoogle css={iconCSS} />;
+            case "Twitter":
+                return <FaTwitter css={iconCSS} />;
+            case "Github":
+                return <FaGithub css={iconCSS} />;
         }
     };
 
@@ -71,6 +51,11 @@ const AuthConnection = ({ providerId, bottom }) => {
         );
     }, [currentUser]);
 
+    const iconCSS = css`
+        width: 34px;
+        height: 34px;
+    `;
+    
     const buttonCSS = (theme) =>
         `
         &:hover { 

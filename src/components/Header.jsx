@@ -23,16 +23,6 @@ const Header = ({ themeButtonOnly }) => {
             m="auto"
             mt="7"
         >
-            {!themeButtonOnly && (
-                <Link href="/">
-                    <a>
-                        <Heading fontSize="3xl" fontWeight="bold">
-                            Polls
-                        </Heading>
-                    </a>
-                </Link>
-            )}
-
             {themeButtonOnly ? (
                 <IconButton
                     aria-label="Toggle Theme"
@@ -42,36 +32,46 @@ const Header = ({ themeButtonOnly }) => {
                     {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
                 </IconButton>
             ) : (
-                <Flex align="center">
-                    {currentUser ? (
-                        <Link href="/dashboard">
-                            <a>
-                                <Avatar
-                                    mr="3"
-                                    w="40px"
-                                    h="40px"
-                                    src={currentUser?.photoURL}
-                                />
-                            </a>
-                        </Link>
-                    ) : (
-                        <Link href="/signin">
-                            <a>
-                                <Button aria-label="Sign In" mr="2">
-                                    Sign In
-                                </Button>
-                            </a>
-                        </Link>
-                    )}
+                <>
+                    <Link href="/">
+                        <a>
+                            <Heading fontSize="3xl" fontWeight="bold">
+                                Polls
+                            </Heading>
+                        </a>
+                    </Link>
 
-                    <IconButton
-                        aria-label="Toggle Theme"
-                        onClick={toggleColorMode}
-                        borderRadius="md"
-                    >
-                        {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-                    </IconButton>
-                </Flex>
+                    <Flex align="center">
+                        {currentUser ? (
+                            <Link href="/dashboard">
+                                <a>
+                                    <Avatar
+                                        mr="3"
+                                        w="40px"
+                                        h="40px"
+                                        src={currentUser?.photoURL}
+                                    />
+                                </a>
+                            </Link>
+                        ) : (
+                            <Link href="/signin">
+                                <a>
+                                    <Button aria-label="Sign In" mr="2">
+                                        Sign In
+                                    </Button>
+                                </a>
+                            </Link>
+                        )}
+
+                        <IconButton
+                            aria-label="Toggle Theme"
+                            onClick={toggleColorMode}
+                            borderRadius="md"
+                        >
+                            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+                        </IconButton>
+                    </Flex>
+                </>
             )}
         </Flex>
     );

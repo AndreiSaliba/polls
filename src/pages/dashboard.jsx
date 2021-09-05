@@ -30,7 +30,6 @@ const Dashboard = () => {
         const timeout = setTimeout(() => {
             !currentUser && router.push("/");
         }, 500);
-
         return () => clearTimeout(timeout);
     }, [currentUser, router]);
 
