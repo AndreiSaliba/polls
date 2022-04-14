@@ -19,7 +19,7 @@ import moment from "moment";
 import numeral from "numeral";
 import VoteButton from "./VoteButton";
 
-const VoteCard = ({ data, setView, updateData, ipAddress }) => {
+const VoteCard = ({ data, setView, updateData, ipAddress, hasVoted }) => {
     const { pollID, title, options, ipChecking, dateCreated } = data;
     const totalVotes = data.options.reduce(
         (totalVotes, option) => totalVotes + option.count,
@@ -28,7 +28,7 @@ const VoteCard = ({ data, setView, updateData, ipAddress }) => {
 
     const { currentUser } = useContext(AuthContext);
     const [selected, setSelected] = useState("");
-    const [userVotedLocal, setUserVotedLocal] = useState(
+    const [hasVotedLocal, setHasVotedLocal] = useState(
         Array.from(
             JSON.parse(localStorage.getItem("userVotes")) ?? []
         ).includes(pollID)
@@ -162,7 +162,7 @@ const VoteCard = ({ data, setView, updateData, ipAddress }) => {
                             `,
                             ButtonCSS,
                         ]}
-                        isDisabled={userVotedLocal}
+                        isDisabled={hasVotedLocal}
                         onClick={() => {
                             if (selected) {
                                 addVote(
@@ -172,7 +172,7 @@ const VoteCard = ({ data, setView, updateData, ipAddress }) => {
                                     ipAddress
                                 ).then((res) => {
                                     updateData();
-                                    setUserVotedLocal(true);
+                                    setHasVotedLocal(true);
                                     if (res.code === "already-voted") {
                                         toast({
                                             description: res.message,

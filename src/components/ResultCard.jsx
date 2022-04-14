@@ -17,7 +17,7 @@ import numeral from "numeral";
 import ResultProgress from "./ResultProgress";
 
 const ResultCard = ({ data, setView }) => {
-    const { title, options, ipChecking, dateCreated } = data;
+    const { pollID, title, options, ipChecking, dateCreated } = data;
     const totalVotes = data.options.reduce(
         (totalVotes, option) => totalVotes + option.count,
         0
@@ -26,6 +26,10 @@ const ResultCard = ({ data, setView }) => {
     const { onCopy } = useClipboard(window.location.href);
     const { colorMode } = useColorMode();
     const toast = useToast();
+
+    const hasVotedLocal = Array.from(
+        JSON.parse(localStorage.getItem("userVotes")) ?? []
+    ).includes(pollID);
 
     const ButtonCSS = (theme) => `
             margin-top: 5px;
@@ -70,7 +74,7 @@ const ResultCard = ({ data, setView }) => {
                         justify="center"
                         ml="3"
                     >
-                         <Tooltip
+                        <Tooltip
                             label={moment(
                                 moment.unix(dateCreated.seconds)
                             ).format("Do MMMM YYYY - H:mm")}
@@ -125,9 +129,14 @@ const ResultCard = ({ data, setView }) => {
                         >
                             Copy Link
                         </Button>
-                        <Button css={ButtonCSS} onClick={() => setView("vote")}>
-                            Vote
-                        </Button>
+                        {hasVotedLocal && (
+                            <Button
+                                css={ButtonCSS}
+                                onClick={() => setView("vote")}
+                            >
+                                Vote
+                            </Button>
+                        )}
                     </Flex>
                 </Flex>
             </Flex>

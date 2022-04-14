@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { getPoll } from "../../utils/db";
 import { Center } from "@chakra-ui/react";
@@ -6,12 +6,13 @@ import Head from "next/head";
 import Header from "../../components/Header";
 import VoteCard from "../../components/VoteCard";
 import ResultCard from "../../components/ResultCard";
+import sha256 from "crypto-js/sha256";
 
 const Poll = ({ ip }) => {
+    const [view, setView] = useState("vote");
+    const [pollData, setPollData] = useState();
     const router = useRouter();
     const { id } = router.query;
-    const [pollData, setPollData] = useState();
-    const [view, setView] = useState("vote");
 
     const updateData = () => {
         getPoll(id).then((doc) => {
@@ -49,7 +50,9 @@ const Poll = ({ ip }) => {
 
 export default Poll;
 
-export const getServerSideProps = async ({ req, res }) => {
+export const getServerSideProps = async ({ req }) => {
     const ip = req.headers["x-real-ip"] || null;
-    return { props: { ip } };
+    return {
+        props: { ip: sha256(ip + process.env.IP_HASH_SECRET).toString() },
+    };
 };
