@@ -98,6 +98,7 @@ const VoteCard = ({ data, setView, updateData, ipAddress, hasVoted }) => {
                                 moment.unix(dateCreated.seconds)
                             ).format("Do MMMM YYYY - H:mm")}
                             placement="top"
+                            gutter={3}
                             bg={colorMode === "dark" ? "gray.600" : "gray.300"}
                             color={colorMode === "dark" ? "white" : "black"}
                         >
@@ -108,13 +109,21 @@ const VoteCard = ({ data, setView, updateData, ipAddress, hasVoted }) => {
                             </Text>
                         </Tooltip>
 
-                        <Text fontSize="xs" textAlign="right">{`${numeral(
-                            totalVotes
-                        ).format("0.[0]a")} ${
-                            totalVotes == 1 ? "vote" : "votes"
-                        }${
-                            ipChecking ? " - IP Duplication Checking" : ""
-                        }`}</Text>
+                        <Tooltip
+                            label="IP addresses are stored as SHA256 salted hashes."
+                            placement="top"
+                            gutter={3}
+                            bg={colorMode === "dark" ? "gray.600" : "gray.300"}
+                            color={colorMode === "dark" ? "white" : "black"}
+                        >
+                            <Text fontSize="xs" textAlign="right">{`${numeral(
+                                totalVotes
+                            ).format("0.[0]a")} ${
+                                totalVotes == 1 ? "vote" : "votes"
+                            }${
+                                ipChecking ? " - IP Duplication Checking" : ""
+                            }`}</Text>
+                        </Tooltip>
                     </Flex>
                 </Flex>
                 {options.map((element, idx) => {
