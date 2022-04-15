@@ -36,8 +36,7 @@ const CreatePoll = () => {
                 duration: 5000,
                 isClosable: true,
             });
-        }
-        if (optionArray.length <= 1) {
+        } else if (optionArray.length <= 1) {
             toast({
                 description: "At least 2 options are required.",
                 status: "error",
