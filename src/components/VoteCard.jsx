@@ -125,7 +125,7 @@ const VoteCard = ({ data, setView, updateData, ipAddress, hasVoted }) => {
                     {options.map((element) => {
                         const { id, option } = element;
                         return (
-                            <RadioGroup.Option value={id}>
+                            <RadioGroup.Option key={id} value={id}>
                                 {({ checked }) => (
                                     <VoteButton key={id} checked={checked}>
                                         {option}
