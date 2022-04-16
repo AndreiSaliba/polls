@@ -45,7 +45,7 @@ export const createPoll = (uid, docID, data) => {
         });
 };
 
-export const addVote = async (id, uid, option, ipAddress = null) => {
+export const addVote = async (id, uid, optionID, ipAddress = null) => {
     const data = await getPoll(id).then((doc) => doc.data());
     const localVotes = JSON.parse(localStorage.getItem("userVotes")) || [];
     let userVoted;
@@ -59,8 +59,7 @@ export const addVote = async (id, uid, option, ipAddress = null) => {
     }
 
     const addCount = async () => {
-        const index = data.options.findIndex((item) => item.option === option);
-        data.options[index].count += 1;
+        data.options[optionID].count += 1;
         return firestore
             .collection("polls")
             .doc(id)

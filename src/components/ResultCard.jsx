@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
-import React from "react";
+import React, { useState } from "react";
 import {
     Flex,
     Button,
@@ -27,9 +27,11 @@ const ResultCard = ({ data, setView }) => {
     const { colorMode } = useColorMode();
     const toast = useToast();
 
-    const hasVotedLocal = Array.from(
-        JSON.parse(localStorage.getItem("userVotes")) ?? []
-    ).includes(pollID);
+    const [hasVotedLocal] = useState(
+        Array.from(
+            JSON.parse(localStorage.getItem("userVotes")) ?? []
+        ).includes(pollID)
+    );
 
     const ButtonCSS = (theme) => `
             margin-top: 5px;
@@ -137,7 +139,7 @@ const ResultCard = ({ data, setView }) => {
                         >
                             Copy Link
                         </Button>
-                        {hasVotedLocal && (
+                        {!hasVotedLocal && (
                             <Button
                                 css={ButtonCSS}
                                 onClick={() => setView("vote")}

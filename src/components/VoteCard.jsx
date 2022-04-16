@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../utils/Auth";
 import { addVote } from "../utils/db";
 import {
@@ -11,10 +11,10 @@ import {
     Button,
     useColorMode,
     useClipboard,
-    useRadioGroup,
     useToast,
     Tooltip,
 } from "@chakra-ui/react";
+import { RadioGroup } from "@headlessui/react";
 import moment from "moment";
 import numeral from "numeral";
 import VoteButton from "./VoteButton";
@@ -34,13 +34,8 @@ const VoteCard = ({ data, setView, updateData, ipAddress, hasVoted }) => {
         ).includes(pollID)
     );
 
-    const { colorMode } = useColorMode();
     const { onCopy } = useClipboard(window.location.href);
-    const { getRootProps, getRadioProps } = useRadioGroup({
-        name: "Poll",
-        onChange: setSelected,
-    });
-    const group = getRootProps();
+    const { colorMode } = useColorMode();
     const toast = useToast();
 
     const ButtonCSS = (theme) => `
@@ -79,7 +74,7 @@ const VoteCard = ({ data, setView, updateData, ipAddress, hasVoted }) => {
                 borderRadius="lg"
                 flexDirection="column"
                 justify="space-between"
-                {...group}
+                // {...group}
             >
                 <Flex
                     justify="space-between"
@@ -126,15 +121,20 @@ const VoteCard = ({ data, setView, updateData, ipAddress, hasVoted }) => {
                         </Tooltip>
                     </Flex>
                 </Flex>
-                {options.map((element, idx) => {
-                    const { option: value } = element;
-                    const radio = getRadioProps({ value });
-                    return (
-                        <VoteButton key={value + idx} {...radio}>
-                            {value}
-                        </VoteButton>
-                    );
-                })}
+                <RadioGroup value={selected} onChange={setSelected}>
+                    {options.map((element) => {
+                        const { id, option } = element;
+                        return (
+                            <RadioGroup.Option value={id}>
+                                {({ checked }) => (
+                                    <VoteButton key={id} checked={checked}>
+                                        {option}
+                                    </VoteButton>
+                                )}
+                            </RadioGroup.Option>
+                        );
+                    })}
+                </RadioGroup>
                 <Flex mt="3" justify="space-between" wrap="wrap">
                     <Flex wrap="wrap">
                         <Button
@@ -210,6 +210,18 @@ const VoteCard = ({ data, setView, updateData, ipAddress, hasVoted }) => {
                                             duration: 3000,
                                             isClosable: true,
                                         });
+
+                                        let array =
+                                            JSON.parse(
+                                                localStorage.getItem(
+                                                    "userVotes"
+                                                )
+                                            ) ?? [];
+                                        array.push(pollID);
+                                        localStorage.setItem(
+                                            "userVotes",
+                                            JSON.stringify(array)
+                                        );
                                         setView("results");
                                     }
                                 });

@@ -1,28 +1,26 @@
-import { Box, useColorMode, useRadio } from "@chakra-ui/react";
+import { Box, useColorMode } from "@chakra-ui/react";
 
-const VoteButton = (props) => {
-    const { getInputProps, getCheckboxProps } = useRadio(props);
-    const input = getInputProps();
-    const checkbox = getCheckboxProps();
+const VoteButton = ({ checked, children }) => {
     const { colorMode } = useColorMode();
 
     return (
-        <Box as="label">
-            <input {...input} />
-            <Box
-                {...checkbox}
-                px={5}
-                py={3}
-                mb={1.5}
-                bg={colorMode === "dark" ? "whiteAlpha.200" : "gray.200"}
-                borderRadius="md"
-                cursor="pointer"
-                _checked={{
-                    bg: colorMode === "dark" ? "blue.500" : "blue.400",
-                }}
-            >
-                {props.children}
-            </Box>
+        <Box
+            px={5}
+            py={3}
+            mb={1.5}
+            bg={
+                checked
+                    ? colorMode === "dark"
+                        ? "blue.500"
+                        : "blue.400"
+                    : colorMode === "dark"
+                    ? "whiteAlpha.200"
+                    : "gray.200"
+            }
+            borderRadius="md"
+            cursor="pointer"
+        >
+            {children}
         </Box>
     );
 };

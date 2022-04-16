@@ -26,8 +26,8 @@ const CreatePoll = () => {
     const submitPoll = () => {
         const optionArray = fields
             .filter((item) => item !== "")
-            .map((element) => {
-                return { option: element, count: 0 };
+            .map((element, index) => {
+                return { id: index, option: element, count: 0 };
             });
         if (!title) {
             toast({
